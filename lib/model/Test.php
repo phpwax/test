@@ -1,5 +1,7 @@
 <?php
 class Test extends WaxModel{
+  public static $test_db = false;
+  
   public function setup(){
     $this->define("test_name", "CharField");
     $this->define("model_class", "CharField");
@@ -14,6 +16,19 @@ class Test extends WaxModel{
     $this->define("last_successful_app_hash", "CharField");
     
     $this->define("validity", "IntegerField");
+  }
+  
+  //special hook to push this model to the test database in config.
+  function __construct($params=null){
+    if(!self::$test_db){
+      self::$db = false;
+      Config::set_environment('test');
+      self::load_adapter(Config::get('db'));
+      $ret = parent::__construct($params);
+      self::$test_db = self::$db;
+      Config::set_environment(ENV);
+      return $ret;
+    }else return parent::__construct($params);
   }
   
   public static function get_hash($dir){
