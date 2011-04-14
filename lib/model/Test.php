@@ -4,18 +4,18 @@ class Test extends WaxModel{
   
   public function setup(){
     $this->define("test_name", "CharField");
-    $this->define("model_class", "CharField");
+    $this->define("model_class", "CharField", array("widget"=>"SelectInput"));
     $this->define("model_id", "IntegerField");
+    $this->define("valid", "IntegerField");
     
-    $this->define("last_run", "DateTimeField");
-    $this->define("last_successful_run", "DateTimeField");
     
-    $this->define("last_hash_test_present", "CharField");
+    $this->define("last_run", "DateTimeField", array("editable"=>false));
+    $this->define("last_successful_run", "DateTimeField", array("editable"=>false));
     
-    $this->define("last_app_hash", "CharField");
-    $this->define("last_successful_app_hash", "CharField");
+    $this->define("last_hash_test_present", "CharField", array("editable"=>false));
     
-    $this->define("validity", "IntegerField");
+    $this->define("last_app_hash", "CharField", array("editable"=>false));
+    $this->define("last_successful_app_hash", "CharField", array("editable"=>false));
   }
   
   //special hook to push this model to the test database in config.
@@ -40,9 +40,13 @@ class Test extends WaxModel{
     $model = new $this->model_class($this->model_id);
     $test_result = $model->validate();
     $this->last_run = date("Y-m-d H:i:s");
-    if($test_result == $this->validity) $this->last_successful_run = date("Y-m-d H:i:s");
+    if($test_result == $this->valid) $this->last_successful_run = date("Y-m-d H:i:s");
     $this->save();
     return $test_result;
+  }
+  
+  public function list_models(){
+    
   }
 }
 ?>
