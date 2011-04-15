@@ -1,9 +1,13 @@
 <?php
-class Test extends WaxModel{
-  public static $test_db = false;
+class WildfireTest extends WaxModel{
+  static public $adapter = false;
+  static public $db_settings = false;
+  static public $db = false;
+  static public $test_db = false;
   
   public function setup(){
-    $this->define("test_name", "CharField");
+    $this->define("test_name", "CharField", array("scaffold"=>true));
+    $this->define("url", "CharField");
     $this->define("model_class", "CharField", array("widget"=>"SelectInput"));
     $this->define("model_id", "IntegerField");
     $this->define("valid", "IntegerField");
@@ -23,12 +27,12 @@ class Test extends WaxModel{
     if(!self::$test_db){
       self::$db = false;
       Config::set_environment('test');
-      self::load_adapter(Config::get('db'));
-      $ret = parent::__construct($params);
+      $config = Config::get('db');
+      self::load_adapter($config);
+      parent::__construct($params);
       self::$test_db = self::$db;
       Config::set_environment(ENV);
-      return $ret;
-    }else return parent::__construct($params);
+    }else parent::__construct($params);
   }
   
   public static function get_hash($dir){
