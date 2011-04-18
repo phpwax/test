@@ -33,6 +33,21 @@ class WildfireTest extends WaxModel{
     }else parent::__construct($params);
   }
   
+  public function before_save(){
+    if(!$this->test_name) $this->test_name = ""; //default for "empty" models to work in the CMS
+    
+    //if there were changes to the test's data, reset the last run times and status
+    if($this->primval() && ($old_model = self::find($this->primval()))){
+      if($this->model_class != $old_model->model_class || $this->model_id != $old_model->model_id || $this->valid != $old_model->valid){
+        $this->status = 0;
+        $this->last_run = false;
+        $this->last_successful_run = false;
+        $this->last_app_hash = false;
+        $this->last_successful_app_hash = false;
+      }
+    }
+  }
+  
   public static function get_hash($dir){
     //exec("cd $dir; git rev-parse HEAD;", $ret);
     //print_r($ret); exit;
