@@ -77,5 +77,9 @@ class WildfireTest extends WaxModel{
     if($this->columns[$column][0] == "DateTimeField" && $this->$column == "0000-00-00 00:00:00") return "Never";
     else return parent::humanize($column);
   }
+  
+  public function is_runnable(){
+    return $this->model_class && $this->model_id;
+  }
 }
 ?>
