@@ -51,5 +51,10 @@ class WildfireTest extends WaxModel{
   public function list_models(){
     
   }
+  
+  public function humanize($column=false){
+    if($this->columns[$column][0] == "DateTimeField" && $this->$column == "0000-00-00 00:00:00") return "Never";
+    else return parent::humanize($column);
+  }
 }
 ?>
