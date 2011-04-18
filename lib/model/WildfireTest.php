@@ -24,13 +24,12 @@ class WildfireTest extends WaxModel{
   
   //special hook to push this model to the test database in config.
   function __construct($params=null){
-    if(!self::$test_db){
-      self::$db = false;
+    if(!static::$test_db){
+      static::$db = false;
       Config::set_environment('test');
-      $config = Config::get('db');
-      self::load_adapter($config);
+      static::load_adapter(Config::get('db'));
       parent::__construct($params);
-      self::$test_db = self::$db;
+      static::$test_db = self::$db;
       Config::set_environment(ENV);
     }else parent::__construct($params);
   }
