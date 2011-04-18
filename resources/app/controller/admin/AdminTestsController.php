@@ -1,3 +1,3 @@
 <?php
-class AdminTestsController extends BaseAdminTestController{}
+class AdminTestsController extends CMSAdminTestsController{}
 ?>

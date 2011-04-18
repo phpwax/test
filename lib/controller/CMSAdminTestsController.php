@@ -1,5 +1,5 @@
 <?php
-class BaseAdminTestController extends AdminComponent{
+class CMSAdminTestsController extends AdminComponent{
   public $module_name = "tests";
   public $model_class = 'WildfireTest';
   public $display_name = "Tests";
