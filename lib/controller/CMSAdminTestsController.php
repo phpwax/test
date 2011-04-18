@@ -15,9 +15,17 @@ class CMSAdminTestsController extends AdminComponent{
   }
   
   public function run_test(){
+    $db_backup = WaxModel::$db;
+    WaxModel::$db = WildfireTest::$test_db;
     WaxEvent::run("cms.form.setup", $this);
-    if($this->model->id) $this->model->run_test();
-    else foreach($this->model->all() as $row) $row->run_test();
+    if($this->model->id){
+      if($this->model->is_runnable()) $this->model->run_test();
+      elseif($this->model->test_name) Session::add_message("Can't run {$this->model->test_name}, please check it's data setup");
+    }else foreach($this->model->all() as $row){
+      if($row->is_runnable()) $row->run_test();
+      elseif($row->test_name) Session::add_message("Can't run {$row->test_name}, please check it's data setup");
+    }
+    WaxModel::$db = $db_backup;
     $this->redirect_to("/admin/tests/");
   }
   
