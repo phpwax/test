@@ -53,6 +53,14 @@ class WildfireTest extends WaxModel{
     //print_r($ret); exit;
   }
   
+  public static function model_list(){
+    //check all user/app classes
+    $classes_to_check = array_diff_key(Autoloader::$registry, array("framework"=>0, "plugin"=>0));
+    //only include models
+    foreach($classes_to_check as $role => $classes) foreach($classes as $class => $path) if(is_subclass_of($class, "WaxModel")) $ret[] = $class;
+    return $ret;
+  }
+  
   public function run_test(){
     $model = new $this->model_class($this->model_id);
     $test_result = $model->validate();
