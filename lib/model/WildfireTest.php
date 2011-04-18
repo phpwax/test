@@ -6,17 +6,16 @@ class WildfireTest extends WaxModel{
   static public $test_db = false;
   
   public function setup(){
-    $this->define("test_name", "CharField", array("scaffold"=>true));
-    $this->define("url", "CharField");
-    $this->define("model_class", "CharField", array("widget"=>"SelectInput"));
-    $this->define("model_id", "IntegerField");
-    $this->define("valid", "IntegerField");
+    $this->define("status", "IntegerField", array("scaffold"=>true, "editable"=>false, "default"=>0, "choices"=>array(0=>"Draft/Revision",1=>"Live")));
+    $this->define("test_name", "CharField", array("scaffold"=>true, "default"=>""));
+    $this->define("url", "CharField", array("editable"=>false));
+    $this->define("model_class", "CharField", array("group"=>"Data"));
+    $this->define("model_id", "IntegerField", array("group"=>"Data"));
+    $this->define("valid", "IntegerField", array("widget"=>"CheckboxInput"));
     
     
-    $this->define("last_run", "DateTimeField", array("editable"=>false));
-    $this->define("last_successful_run", "DateTimeField", array("editable"=>false));
-    
-    $this->define("last_hash_test_present", "CharField", array("editable"=>false));
+    $this->define("last_run", "DateTimeField", array("editable"=>false, "scaffold"=>true));
+    $this->define("last_successful_run", "DateTimeField", array("editable"=>false, "scaffold"=>true));
     
     $this->define("last_app_hash", "CharField", array("editable"=>false));
     $this->define("last_successful_app_hash", "CharField", array("editable"=>false));
@@ -43,7 +42,10 @@ class WildfireTest extends WaxModel{
     $model = new $this->model_class($this->model_id);
     $test_result = $model->validate();
     $this->last_run = date("Y-m-d H:i:s");
-    if($test_result == $this->valid) $this->last_successful_run = date("Y-m-d H:i:s");
+    if($test_result == $this->valid){
+      $this->last_successful_run = date("Y-m-d H:i:s");
+      $this->status = 1;
+    }else $this->status = 0;
     $this->save();
     return $test_result;
   }
