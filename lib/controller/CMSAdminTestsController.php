@@ -12,6 +12,25 @@ class CMSAdminTestsController extends AdminComponent{
       $obj = WaxEvent::data();
       $obj->quick_links["Run All Tests"] = "/admin/tests/run_test/";
     });
+    WaxEvent::add("cms.save.success", function(){
+      if(param('data_source') == "new"){
+        $controller = WaxEvent::data();
+        $new_model = new $controller->model->model_class;
+        $new_model->set_attributes(param($new_model->table));
+        
+        //DIRTY HACKS START HERE
+        $db_backup = WaxModel::$db;
+        WaxModel::$db = WildfireTest::$test_db;
+        $new_model->insert(); //doesn't call validation
+        WaxModel::$db = $db_backup;
+        //DIRTY HACKS END HERE (hopefully :)
+        
+        if($new_model->id){
+          $controller->model->model_id = $new_model->id;
+          $controller->model->save();
+        }
+      }
+    });
   }
   
   public function run_test(){
@@ -30,17 +49,18 @@ class CMSAdminTestsController extends AdminComponent{
   }
   
   public function _data(){
-    $this->test_models = array();
-    //check all user/app classes
-    $classes_to_check = array_diff_key(Autoloader::$registry, array("framework"=>0, "plugin"=>0));
-    //only include models
-    foreach($classes_to_check as $role => $classes) foreach($classes as $class => $path) if(is_subclass_of($class, "WaxModel")) $this->test_models[] = $class;
+    $this->test_models = WildfireTest::model_list();
     
-    //fetch all rows to choose one for this test
-    if($model_class = $this->model->model_class){
-      $this->data_rows = $model_class::find("all");
-      foreach($this->data_rows->model->columns as $col_name => $col_data) if($col_data[1]['scaffold']) $this->data_scaffold[$col_name] = true;
+    //fetch all rows from test db to choose one for this test
+    $this->data_rows = array();
+    $db_backup = WaxModel::$db;
+    WaxModel::$db = WildfireTest::$test_db;
+    foreach($this->test_models as $model_class) {
+      $data_model = new $model_class;
+      $this->data_rows[$model_class] = $data_model->all();
+      foreach($this->data_rows[$model_class]->model->columns as $col_name => $col_data) if($col_data[1]['scaffold']) $this->data_scaffold[$model_class][$col_name] = true;
     }
+    WaxModel::$db = $db_backup;
   }
 }
 ?>
