@@ -1,0 +1,14 @@
+<div class="field field-modelclass field-data-modelclass WildfireTest-modelclass clearfix">
+  <label for="wildfire_test_model_class">Model class</label>
+  <select name="<?=$model->table?>[model_class]" id="<?=$model->table?>_model_class" class="input_field select_field validate valid-length">
+    <?foreach($test_models as $model_class):?>
+      <option value="<?=$model_class?>"<?=$model->model_class == $model_class?' selected="selected"':''?>><?=$model_class?></option>
+    <?endforeach?>
+  </select>
+</div>
+
+<?=$fields['model_id']->render()?>
+
+<?if($data_rows):?>
+  <?=partial("_list", array('cms_content'=>$data_rows, "scaffold_columns"=>$data_scaffold, "operation_actions"=>array("Choose"), "primval"=>$model->model_id))?>
+<?endif?>

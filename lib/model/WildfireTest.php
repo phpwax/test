@@ -9,8 +9,8 @@ class WildfireTest extends WaxModel{
     $this->define("status", "IntegerField", array("scaffold"=>true, "editable"=>false, "default"=>0, "choices"=>array(0=>"Draft/Revision",1=>"Live")));
     $this->define("test_name", "CharField", array("scaffold"=>true, "default"=>""));
     $this->define("url", "CharField", array("editable"=>false));
-    $this->define("model_class", "CharField", array("group"=>"Data"));
-    $this->define("model_id", "IntegerField", array("group"=>"Data"));
+    $this->define("model_class", "CharField", array("group"=>"Data", "editable"=>false));
+    $this->define("model_id", "IntegerField", array("group"=>"Data", "widget"=>"HiddenInput"));
     $this->define("valid", "IntegerField", array("widget"=>"CheckboxInput"));
     
     
