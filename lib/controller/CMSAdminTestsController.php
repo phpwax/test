@@ -8,6 +8,7 @@ class CMSAdminTestsController extends AdminComponent{
   public $filter_fields = array(
                             'text' => array('columns'=>array('test_name'), 'partial'=>'_filters_text', 'fuzzy'=>true)
                           );
+  public $allowed_models = array();
   
   public function events(){
     parent::events();
@@ -52,7 +53,7 @@ class CMSAdminTestsController extends AdminComponent{
   }
   
   public function _data(){
-    $this->test_models = WildfireTest::model_list();
+    $this->test_models = array_intersect(WildfireTest::model_list(), $this->allowed_models);
     
     //fetch all rows from test db to choose one for this test
     $this->data_rows = array();
