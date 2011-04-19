@@ -6,7 +6,7 @@ jQuery(function(){
   });
   
   jQuery("#wildfire_test_model_class, #data_source").change(function(){
-    jQuery(".test-data-switcher").removeClass("active");
-    jQuery("#"+jQuery("#data_source").val()+"_data_"+jQuery("#wildfire_test_model_class").val()).addClass("active");
+    jQuery(".test-data-switcher").removeClass("active-data");
+    jQuery("#"+jQuery("#data_source").val()+"_data_"+jQuery("#wildfire_test_model_class").val()).addClass("active-data");
   });
 });

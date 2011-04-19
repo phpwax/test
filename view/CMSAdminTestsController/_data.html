@@ -20,13 +20,13 @@
 
 <div class="field clearfix">
   <?foreach($test_models as $model_class):?>
-    <div id="existing_data_<?=$model_class?>" class="test-data-switcher<?=($model->model_id && $model_class == $model->model_class)?' active':''?>">
+    <div id="existing_data_<?=$model_class?>" class="test-data-switcher<?=($model->model_id && $model_class == $model->model_class)?' active-data':''?>">
       <?=partial("_list", array('cms_content'=>$data_rows[$model_class], "scaffold_columns"=>$data_scaffold[$model_class], "operation_actions"=>array("Choose"), "primval"=>$model->model_id))?>
     </div>
   <?endforeach?>
 
   <?foreach($test_models as $model_class):?>
-    <div id="new_data_<?=$model_class?>" class="test-data-switcher<?=(!$model->model_id && $model_class == $model->model_class)?' active':''?>">
+    <div id="new_data_<?=$model_class?>" class="test-data-switcher<?=(!$model->model_id && $model_class == $model->model_class)?' active-data':''?>">
       <?foreach(new WaxForm(new $model_class) as $el):?>
         <?=$el->render()?>
       <?endforeach?>
