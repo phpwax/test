@@ -5,6 +5,9 @@ class CMSAdminTestsController extends AdminComponent{
   public $display_name = "Tests";
   public $dashboard = false;
   public $operation_actions = array('edit', 'run_test');
+  public $filter_fields = array(
+                            'text' => array('columns'=>array('test_name'), 'partial'=>'_filters_text', 'fuzzy'=>true)
+                          );
   
   public function events(){
     parent::events();
