@@ -25,7 +25,7 @@ class WildfireTest extends WaxModel{
   function __construct($params=null){
     if(!static::$test_db){
       static::$db = false;
-      Config::set_environment('test');
+      Config::set_environment(ENV.'test');
       static::load_adapter(Config::get('db'));
       parent::__construct($params);
       static::$test_db = self::$db;
